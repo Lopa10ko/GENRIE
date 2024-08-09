@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from fedot.core.data.data import OutputData
+from fedot.core.operations.operation_parameters import OperationParameters
 
 from fedot_ind.api.utils.data import init_input_data
 from fedot_ind.core.models.manifold.riemann_embeding import RiemannExtractor
@@ -19,7 +20,10 @@ def input_data():
 
 @pytest.fixture(scope='session')
 def default_params():
-    return {'n_filter': 4, 'estimator': 'scm', 'tangent_metric': 'riemann', 'SPD_metric': 'riemann'}
+    return OperationParameters(**{'n_filter': 4,
+                                  'estimator': 'scm',
+                                  'tangent_metric': 'riemann',
+                                  'SPD_metric': 'riemann'})
 
 
 def test__init_riemann_extractor(default_params):
