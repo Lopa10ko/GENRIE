@@ -45,22 +45,21 @@ class RiemannExtractor(BaseExtractor):
                            'tangent': self.extract_riemann_features,
                            'ensemble': self._ensemble_features}
 
-        self.estimator = params.get('estimator', 'scm')
-        self.spd_metric = params.get('SPD_metric', 'riemann')
-        self.tangent_metric = params.get('tangent_metric', 'riemann')
+        self.estimator = self.params.get('estimator', 'scm')
+        self.spd_metric = self.params.get('SPD_metric', 'riemann')
+        self.tangent_metric = self.params.get('tangent_metric', 'riemann')
         self.extraction_strategy = 'ensemble'
 
-        self.spd_space = params.get('SPD_space', None)
-        self.tangent_space = params.get('tangent_space', None)
+        self.spd_space = self.params.get('SPD_space', None)
+        self.tangent_space = self.params.get('tangent_space', None)
         if np.any([self.spd_space, self.tangent_space]) is None:
             self._init_spaces()
             self.fit_stage = True
         self.extraction_func = extraction_dict[self.extraction_strategy]
 
-        self.logging_params.update({
-            'estimator': self.estimator,
-            'tangent_space_metric': self.tangent_metric,
-            'SPD_space_metric': self.spd_metric})
+        self.logging_params.update({'estimator': self.estimator,
+                                    'tangent_space_metric': self.tangent_metric,
+                                    'SPD_space_metric': self.spd_metric})
 
     def _init_spaces(self):
         self.spd_space = Covariances(estimator='scm')
