@@ -1,2 +1,2 @@
-fedot_ind
+fedot_ind @ git+https://github.com/aimclub/Fedot.Industrial.git
 pyriemann
