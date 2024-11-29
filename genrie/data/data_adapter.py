@@ -1,19 +1,19 @@
+import logging
 import torch
 import numpy as np
 
 from itertools import product
-from logging import Logger
 from typing import Union
 from dataclasses import dataclass, field
 from pyriemann.estimation import Covariances, Shrinkage
 from pyriemann.utils.distance import distance
 from scipy.linalg import logm, expm
 
-from genrie.data.mutations import SingleMutation, get_mutation_by_mode
-
 DataType = Union[np.ndarray, torch.Tensor]
-logger = Logger(name='genrie.data')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
+from genrie.data.mutations import SingleMutation, get_mutation_by_mode
 
 
 @dataclass
@@ -36,7 +36,7 @@ class DataStore:
     def get_synthetic_covmats(self, **kwargs) -> np.ndarray:
         mode = kwargs.get('mode', 'ortho')
         mutation = get_mutation_by_mode(mode)
-        new_covmats, diff = self.__mutate_mats(mutation, self.covmats)
+        new_covmats, diff = self.__mutate_mats(mutation, self.covmats, **kwargs)
         logger.debug(msg=f'Mutated covmats using {mode} mode with {diff.sum()} distance diff')
         return new_covmats
 

@@ -23,7 +23,7 @@ class OrthoMutation(SingleMutation):
 class NoiseMutation(SingleMutation):
     def __call__(self, mats: DataType, **kwargs) -> DataType:
         mean = kwargs.get('mean', 0)
-        stdev = kwargs.get('stdev', 1e-2)
+        stdev = kwargs.get('stdev', 1e-1)
         new_mats = np.array([np.random.normal(mean, stdev, size=m.shape) + m for m in mats])
         return new_mats
 
