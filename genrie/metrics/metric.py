@@ -1,16 +1,24 @@
+import numpy as np
+
 from genrie.data.data_adapter import DataType
 from genrie.metrics.distance import compute_onnd, compute_innd
 
+
+AVAILABLE_METRICS = {
+    'onnd': compute_onnd,
+    'innd': compute_innd,
+}
+
+
 class DistanceMetric:
-    metrics = {
-        'onnd': compute_onnd,
-        'innd': compute_innd,
-    }
+    @staticmethod
+    def __call__(real: DataType, synthetic: DataType):
+        metric_dict = {}
+        for metric_name, metric in AVAILABLE_METRICS.items():
+            try:
+                metric_value = metric(real, synthetic)
+            except Exception as _:
+                metric_value = np.nan
+            metric_dict[metric_name] = metric_value
 
-class Metric:
-    def __call__(self, real: DataType, synthetic: DataType):
-        self.metrics_dict = {
-            metric_name: metric_func(real, synthetic)
-            for metric_name, metric_func in self.metrics.items()
-        }
-
+        return metric_dict
