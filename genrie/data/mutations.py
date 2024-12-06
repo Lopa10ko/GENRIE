@@ -15,7 +15,7 @@ class SingleMutation(Callable, ABC):
 
 class OrthoMutation(SingleMutation):
     def __call__(self, mats: DataType, **kwargs) -> DataType:
-        ortho_matrix = ortho_group.rvs(dim=mats.shape[0])
+        ortho_matrix = ortho_group.rvs(dim=mats[0].shape[0])
         new_mats = np.array([ortho_matrix @ m for m in mats])
         return new_mats
 
