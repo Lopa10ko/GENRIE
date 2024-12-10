@@ -1,5 +1,7 @@
 import torch
 
+from genrie.data.data_adapter import DataType
+
 
 def compute_onnd(real: DataType, synthetic: DataType):
     """
