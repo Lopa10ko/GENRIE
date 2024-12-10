@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+from typing import Sequence, Optional, Callable
+
 import numpy as np
 
 from genrie.data.data_adapter import DataType
@@ -11,10 +14,12 @@ AVAILABLE_METRICS = {
 
 
 class DistanceMetric:
-    @staticmethod
-    def __call__(real: DataType, synthetic: DataType):
+    def __init__(self, metrics: Optional[Mapping[str, Callable]] = None):
+        self.metrics = metrics if metrics is not None else AVAILABLE_METRICS
+
+    def __call__(self, real: DataType, synthetic: DataType):
         metric_dict = {}
-        for metric_name, metric in AVAILABLE_METRICS.items():
+        for metric_name, metric in self.metrics.items():
             try:
                 metric_value = metric(real, synthetic)
             except Exception as _:
