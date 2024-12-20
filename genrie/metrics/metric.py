@@ -1,15 +1,17 @@
-from collections.abc import Mapping
-from typing import Sequence, Optional, Callable
-
 import numpy as np
 
+from collections.abc import Mapping
+from typing import Optional, Callable
+
 from genrie.data.data_adapter import DataType
-from genrie.metrics.distance import compute_onnd, compute_innd
+from genrie.metrics.distance import compute_onnd, compute_innd, compute_wasserstein, compute_mmd
 
 
 AVAILABLE_METRICS = {
     'onnd': compute_onnd,
     'innd': compute_innd,
+    'mmd': compute_mmd,
+    'wasserstein': compute_wasserstein,
 }
 
 

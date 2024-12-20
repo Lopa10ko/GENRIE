@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from scipy.linalg import svd, norm, eigvals, cholesky, LinAlgError
 
 
@@ -44,3 +45,31 @@ def is_poisitive_defined(B):
         return True
     except LinAlgError:
         return False
+
+
+def gaussian_kernel(x, y, sigmas):
+    """
+    Compute the Gaussian kernel between two tensors.
+    """
+    sigmas = sigmas.view(sigmas.shape[0], 1)
+    beta = 1. / (2. * sigmas)
+    dist = torch.cdist(x, y) ** 2
+    s = torch.matmul(beta, dist.view(1, -1))
+    return torch.exp(-s)
+
+
+def data_to_tensor(func):
+    """
+    Decorator to convert input data to PyTorch tensors.
+    """
+    def wrapper(*args, **kwargs):
+        tensor_args = []
+        for value in args:
+            if isinstance(value, (list, tuple, np.ndarray)):
+                tensor_args.append(torch.tensor(value, dtype=torch.float32))
+            elif isinstance(value, torch.Tensor):
+                tensor_args.append(value)
+            else:
+                raise ValueError(f"Data type: {type(value)} is not supported")
+        return func(*tensor_args, **kwargs)
+    return wrapper
